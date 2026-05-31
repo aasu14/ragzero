@@ -23,6 +23,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Stub bundled UI
+        # The real UI is built in the `build` job. Tests don't need it, but the
+        # wheel/editable build force-includes ui/dist and the server mounts
+        # ui/dist/assets when present — so create a minimal placeholder here.
+        run: |
+          mkdir -p ui/dist/assets
+          printf '<!doctype html><title>ragzero</title>' > ui/dist/index.html
       - name: Install
         run: |
           python -m pip install -U pip

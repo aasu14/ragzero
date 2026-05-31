@@ -1,0 +1,42 @@
+# Dev configuration — fully in-memory, deterministic, zero external deps
+pipeline:
+  retriever_k: 50
+  final_k: 10
+  chunk_size: 800
+  chunk_overlap: 100
+  max_context_chunks: 8
+  max_tokens: 512
+
+confidence:
+  half_life_days: 365.0
+  default_source_quality: 0.6
+  source_quality:
+    "https://gov.": 0.95
+    "https://wikipedia.org": 0.85
+    "internal://": 0.9
+  w_freshness: 0.25
+  w_source: 0.35
+  w_consistency: 0.40
+  aggregate_top_n: 5
+
+fallback:
+  min_aggregate_confidence: 0.55
+  min_chunks: 1
+  require_min_citations: 1
+  min_top_retrieval_score: 0.0
+
+cache:
+  query_ttl_seconds: 3600
+  max_entries: 1000
+
+backends:
+  embedder: hash
+  embedder_settings:
+    dim: 64
+  vector_store: in_memory
+  keyword_index: bm25
+  keyword_index_settings:
+    k1: 1.5
+    b: 0.75
+  llm: mock
+  tracer: in_memory

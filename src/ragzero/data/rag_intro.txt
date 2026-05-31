@@ -1,0 +1,5 @@
+Retrieval-Augmented Generation (RAG) combines a retrieval system with a language model. The retriever fetches relevant documents from a knowledge corpus, and the language model generates an answer grounded in those documents. This approach reduces hallucination compared to pure parametric models because the answer is constrained to retrieved evidence.
+
+A typical RAG pipeline has these stages: document ingestion, chunking, indexing, query-time retrieval, and constrained generation. Each stage has its own failure modes and design decisions. For example, chunk size affects both retrieval precision and the amount of context the language model sees.
+
+The key advantage of RAG over fine-tuning is that the knowledge base can be updated without retraining the model. This makes RAG suitable for domains where information changes frequently, such as legal, medical, and enterprise knowledge management.

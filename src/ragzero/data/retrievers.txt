@@ -1,0 +1,7 @@
+BM25 is a probabilistic ranking function used by search engines to estimate the relevance of documents to a given query. It is a bag-of-words retrieval function that ranks a set of documents based on the query terms appearing in each document, regardless of their proximity. BM25 builds on the TF-IDF family of algorithms.
+
+Dense vector retrieval uses neural embeddings to map both queries and documents into a high-dimensional vector space. Cosine similarity or inner product between vectors measures semantic similarity. Unlike BM25, dense retrieval can match paraphrases and conceptually related content that does not share exact vocabulary.
+
+Hybrid retrieval combines both approaches. Reciprocal Rank Fusion (RRF) is a simple fusion strategy that combines ranked lists from multiple retrievers without requiring score calibration. The fused score is computed from each item's rank position in each list.
+
+At scale, exact nearest-neighbor search becomes too slow, so approximate algorithms like HNSW (Hierarchical Navigable Small World) are used. HNSW builds a multi-layer proximity graph that supports logarithmic-time queries.

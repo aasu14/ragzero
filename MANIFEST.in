@@ -1,0 +1,12 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include pyproject.toml
+recursive-include src/ragzero/config *.yaml
+recursive-include src/ragzero/data *.txt *.md
+recursive-include src/ragzero/ui/dist *
+recursive-exclude ui/node_modules *
+recursive-exclude ui/src *
+global-exclude __pycache__
+global-exclude *.pyc
+global-exclude .DS_Store

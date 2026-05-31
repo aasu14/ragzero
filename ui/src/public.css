@@ -1,0 +1,140 @@
+/* Public ask-only assistant — standalone branded page.
+   Reuses the theme variables from styles.css; --accent is overridden per-space
+   from the host's chosen color. */
+
+.pub-root {
+  --pa: var(--accent);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px 60px;
+  background:
+    radial-gradient(900px 600px at 50% -10%, color-mix(in srgb, var(--pa) 14%, transparent), transparent 60%),
+    radial-gradient(700px 700px at 50% 120%, color-mix(in srgb, var(--pa) 8%, transparent), transparent 60%),
+    var(--bg);
+}
+
+.pub-wrap { width: 100%; max-width: 780px; }
+
+.pub-head {
+  text-align: center;
+  padding: 48px 0 26px;
+}
+.pub-badge {
+  width: 54px; height: 54px; margin: 0 auto 16px;
+  border-radius: 16px; display: grid; place-items: center;
+  color: #0c0e0a; font-size: 26px; font-weight: 800;
+  background: linear-gradient(135deg, var(--pa), color-mix(in srgb, var(--pa) 55%, #7CFFB2));
+  box-shadow: 0 14px 40px -12px color-mix(in srgb, var(--pa) 70%, transparent);
+}
+.pub-name {
+  font-family: var(--display);
+  font-size: 30px; font-weight: 300; letter-spacing: 0.01em; margin: 0;
+}
+.pub-welcome { color: var(--text-dim); font-size: 14px; margin-top: 8px; line-height: 1.55; }
+
+/* suggested questions */
+.pub-suggest { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 18px 0 6px; }
+.pub-chip {
+  font-size: 12.5px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  transition: color .15s, border-color .15s, background .15s, transform .15s;
+}
+.pub-chip:hover {
+  color: var(--text); transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--pa) 50%, var(--border));
+  background: color-mix(in srgb, var(--pa) 8%, transparent);
+}
+
+/* conversation thread */
+.pub-thread { display: flex; flex-direction: column; gap: 16px; margin: 26px 0; }
+.pub-msg.q {
+  align-self: flex-end; max-width: 85%;
+  background: color-mix(in srgb, var(--pa) 16%, var(--bg-elev));
+  border: 1px solid color-mix(in srgb, var(--pa) 30%, var(--border));
+  color: var(--text);
+  padding: 12px 16px; border-radius: 16px 16px 4px 16px; font-size: 14px;
+}
+.pub-msg.a {
+  align-self: flex-start; max-width: 92%;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 16px 4px;
+  padding: 16px 18px;
+  backdrop-filter: blur(16px) saturate(135%);
+  box-shadow: 0 18px 40px -24px rgba(0,0,0,0.8);
+}
+.pub-msg.a .txt { font-size: 14px; line-height: 1.65; white-space: pre-wrap; color: var(--text); }
+.pub-msg.a.refused .txt { color: var(--text-dim); font-style: italic; }
+.pub-caret {
+  display: inline-block; width: 7px; height: 15px; margin-left: 2px;
+  background: var(--pa); vertical-align: -2px; animation: pub-blink 1s steps(2) infinite;
+}
+@keyframes pub-blink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+
+.pub-meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+  padding-top: 10px; border-top: 1px solid var(--border); }
+.pub-cite {
+  font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  color: var(--text-dim); background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+}
+.pub-cite b { color: color-mix(in srgb, var(--pa) 80%, var(--text)); font-weight: 600; }
+.pub-conf {
+  margin-left: auto; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--success);
+}
+.pub-thinking { color: var(--text-faint); font-family: var(--mono); font-size: 12px; }
+.pub-thinking::after { content: '▍'; animation: pub-blink 1s steps(2) infinite; }
+
+/* ask bar */
+.pub-askbar {
+  position: sticky; bottom: 18px; z-index: 5;
+  display: flex; gap: 10px; align-items: flex-end;
+  padding: 10px; border-radius: 16px;
+  background: rgba(20,22,15,0.7);
+  border: 1px solid color-mix(in srgb, var(--pa) 22%, var(--border));
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 20px 50px -20px rgba(0,0,0,0.85);
+}
+.pub-askbar textarea {
+  flex: 1; border: none; background: transparent; resize: none; min-height: 24px; max-height: 160px;
+  font-family: var(--sans); font-size: 14px; padding: 8px 6px; box-shadow: none;
+}
+.pub-askbar textarea:focus { box-shadow: none; }
+.pub-send {
+  flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; cursor: pointer;
+  display: grid; place-items: center; border: none; color: #0c0e0a;
+  background: linear-gradient(135deg, var(--pa), color-mix(in srgb, var(--pa) 60%, #7CFFB2));
+  box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--pa) 70%, transparent);
+  transition: transform .12s, filter .12s;
+}
+.pub-send:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.06); }
+.pub-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.pub-send svg { width: 18px; height: 18px; }
+
+.pub-modes { display: flex; gap: 6px; margin: 0 0 8px; justify-content: center; }
+.pub-mode {
+  font-size: 11px; padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  color: var(--text-dim); border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+}
+.pub-mode.on { color: var(--text); border-color: var(--pa); background: color-mix(in srgb, var(--pa) 12%, transparent); }
+
+/* access gate */
+.pub-gate {
+  max-width: 380px; margin: 80px auto; text-align: center;
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: 16px; padding: 28px;
+  backdrop-filter: blur(16px);
+}
+.pub-gate h2 { font-family: var(--display); font-weight: 300; margin: 0 0 6px; }
+.pub-gate p { color: var(--text-dim); font-size: 13px; margin: 0 0 16px; }
+.pub-gate input { text-align: center; margin-bottom: 12px; }
+
+.pub-foot { text-align: center; color: var(--text-faint); font-size: 11px;
+  font-family: var(--mono); letter-spacing: 0.08em; margin-top: 30px; }
+.pub-foot a { color: var(--text-dim); }
+
+.pub-state { text-align: center; color: var(--text-dim); margin-top: 120px; font-family: var(--mono); }

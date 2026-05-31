@@ -1,0 +1,164 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ragzero"
+version = "0.1.0"
+description = "Production-ready RAG with near-zero hallucination. Pluggable providers (OpenAI, Anthropic, Gemini, OpenRouter, Azure, Voyage, ...), graph + agentic + multilingual strategies, a FastAPI server with a bundled React UI, and one-click publishing of a configured setup as a public ask-only assistant."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "ragzero contributors" },
+]
+keywords = [
+    "rag",
+    "retrieval-augmented-generation",
+    "llm",
+    "hallucination",
+    "knowledge-graph",
+    "agentic",
+    "multilingual",
+    "openai",
+    "anthropic",
+    "gemini",
+    "openrouter",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: FastAPI",
+    "Operating System :: OS Independent",
+]
+
+# Server dependencies are required because the package ships a CLI that runs the server.
+# Provider SDKs are extras because users may want only some of them.
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "python-multipart>=0.0.9",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+# Provider SDKs — pick the ones you need
+anthropic = ["anthropic>=0.34"]
+openai = ["openai>=1.0"]               # also covers Azure OpenAI and OpenRouter
+gemini = ["google-generativeai>=0.8"]
+voyage = ["voyageai>=0.2"]
+local = ["sentence-transformers>=2.2"]
+faiss = ["faiss-cpu>=1.7"]
+graph = ["networkx>=3.0"]
+neo4j = ["neo4j>=5.0"]
+yaml = ["pyyaml>=6.0"]
+
+# Vector database adapters
+qdrant = ["qdrant-client>=1.7"]
+pinecone = ["pinecone>=5.0"]
+weaviate = ["weaviate-client>=4.0"]
+chroma = ["chromadb>=0.4"]
+pgvector = ["psycopg[binary]>=3.1", "pgvector>=0.2"]
+azure-search = ["azure-search-documents>=11.4"]
+
+# Convenience bundles
+all-providers = [
+    "anthropic>=0.34",
+    "openai>=1.0",
+    "google-generativeai>=0.8",
+    "voyageai>=0.2",
+    "sentence-transformers>=2.2",
+]
+all-stores = [
+    "faiss-cpu>=1.7",
+    "qdrant-client>=1.7",
+    "pinecone>=5.0",
+    "weaviate-client>=4.0",
+    "chromadb>=0.4",
+    "psycopg[binary]>=3.1",
+    "pgvector>=0.2",
+    "azure-search-documents>=11.4",
+]
+all = [
+    "anthropic>=0.34",
+    "openai>=1.0",
+    "google-generativeai>=0.8",
+    "voyageai>=0.2",
+    "sentence-transformers>=2.2",
+    "faiss-cpu>=1.7",
+    "qdrant-client>=1.7",
+    "pinecone>=5.0",
+    "weaviate-client>=4.0",
+    "chromadb>=0.4",
+    "psycopg[binary]>=3.1",
+    "pgvector>=0.2",
+    "azure-search-documents>=11.4",
+    "networkx>=3.0",
+    "pyyaml>=6.0",
+]
+dev = [
+    "pytest>=7.0",
+    "hatchling>=1.18",
+    "build>=1.0",
+    "twine>=4.0",
+]
+
+[project.scripts]
+ragzero = "ragzero.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/aasu14/ragzero"
+Documentation = "https://github.com/aasu14/ragzero#readme"
+Repository = "https://github.com/aasu14/ragzero"
+Issues = "https://github.com/aasu14/ragzero/issues"
+Changelog = "https://github.com/aasu14/ragzero/blob/main/CHANGELOG.md"
+
+# ----------------- Build config -----------------
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ragzero"]
+
+# Bundle the built UI, YAML configs, and sample data inside the wheel.
+# `force-include` puts the pre-built UI into the package's `ui/dist` subdirectory.
+[tool.hatch.build.targets.wheel.force-include]
+"ui/dist" = "src/ragzero/ui/dist"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/ragzero",
+    "tests",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "pyproject.toml",
+]
+exclude = [
+    "ui/node_modules",
+    "ui/src",
+    "ui/index.html",
+    "ui/package.json",
+    "ui/vite.config.js",
+    "**/__pycache__",
+    "**/*.pyc",
+]
+
+# Ship the pre-built UI inside the sdist so a wheel built from the sdist
+# (as `python -m build` does) can still locate ui/dist for force-include.
+[tool.hatch.build.targets.sdist.force-include]
+"ui/dist" = "ui/dist"
+
+# ----------------- Test config -----------------
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers"
